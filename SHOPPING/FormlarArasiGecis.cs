@@ -40,5 +40,35 @@ namespace SHOPPING
             IstanbuldaYasayanlar istanbuldaYasayanlar = new IstanbuldaYasayanlar();
             istanbuldaYasayanlar.ShowDialog();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            UrunEkleme urunEkleme = new UrunEkleme();
+            urunEkleme.ShowDialog();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            StokEkleme stokEkleme = new StokEkleme();
+            stokEkleme.ShowDialog();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            UrunStokListeleme urunStokListeleme = new UrunStokListeleme();
+            urunStokListeleme.ShowDialog();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            UrunIdListeleme urunIdListeleme = new UrunIdListeleme();
+            urunIdListeleme.ShowDialog();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            UrunMarkaStokSiralama urunMarkaStokSiralama = new UrunMarkaStokSiralama();
+            urunMarkaStokSiralama.ShowDialog();
+        }
     }
 }

@@ -17,14 +17,14 @@ namespace SHOPPING
             listView1.Refresh();
         }
 
-        private void IstanbuldaYasayanlar_Load(object sender, EventArgs e)
-        {
-            dbManager = new DbManager();
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             dbManager.IstanbuldaYasam(listView1);
+        }
+
+        private void IstanbuldaYasayanlar_Load_1(object sender, EventArgs e)
+        {
+            dbManager = new DbManager();
         }
     }
 }

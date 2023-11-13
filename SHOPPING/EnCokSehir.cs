@@ -22,19 +22,16 @@ namespace SHOPPING
 
         private void EnCokSehirden()
         {
-            dbManager.EnCokSehir(textBox1);
-            textBox1.Refresh();
-
+            dbManager.EnCokSehir(listView1);
+            listView1.Refresh();
         }
-        private void EnCokSehir_Load(object sender, EventArgs e)
-        {
-            dbManager = new DbManager();
-        }
-
-
         private void button1_Click(object sender, EventArgs e)
         {
-            dbManager.EnCokSehir(textBox1);
+            dbManager.EnCokSehir(listView1);
+        }
+        private void EnCokSehir_Load_1(object sender, EventArgs e)
+        {
+            dbManager = new DbManager();
         }
     }
 }

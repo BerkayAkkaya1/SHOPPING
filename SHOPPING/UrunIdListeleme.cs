@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -11,34 +10,28 @@ using System.Windows.Forms;
 
 namespace SHOPPING
 {
-    public partial class YasOrt : Form
+    public partial class UrunIdListeleme : Form
     {
         private DbManager dbManager;
-        public YasOrt()
+        public UrunIdListeleme()
         {
             InitializeComponent();
         }
-
-        private void YasOrt_Load(object sender, EventArgs e)
+        private void UrunIdListeleme_Load(object sender, EventArgs e)
         {
             dbManager = new DbManager();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex == -1)
+            if (comboBox1.Text == string.Empty || comboBox1.Text == null)
             {
-                MessageBox.Show("Lütfen cinsiyet seçiniz!");
-                return;
-            }
-            if (comboBox1.SelectedIndex == 0)
-            {
-                dbManager.CinsiyeteGoreYasOrtalama(textBox1, false);
+                dbManager.UrunIdListeleme(listView1, int.MaxValue.ToString());
             }
             else
             {
-                dbManager.CinsiyeteGoreYasOrtalama(textBox1, true);
 
+                dbManager.UrunIdListeleme(listView1, comboBox1.Text);
             }
         }
     }

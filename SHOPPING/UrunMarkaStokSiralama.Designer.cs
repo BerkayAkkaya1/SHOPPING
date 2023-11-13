@@ -1,6 +1,6 @@
 ﻿namespace SHOPPING
 {
-    partial class EnCokSehir
+    partial class UrunMarkaStokSiralama
     {
         /// <summary>
         /// Required designer variable.
@@ -28,58 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
             listView1 = new ListView();
-            City = new ColumnHeader();
-            NumberOfCustomer = new ColumnHeader();
+            Brand = new ColumnHeader();
+            TotalStock = new ColumnHeader();
+            button1 = new Button();
             SuspendLayout();
-            // 
-            // button1
-            // 
-            button1.Location = new Point(476, 26);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 27);
-            button1.TabIndex = 1;
-            button1.Text = "İli Getir";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // listView1
             // 
-            listView1.Columns.AddRange(new ColumnHeader[] { City, NumberOfCustomer });
-            listView1.Location = new Point(12, 12);
+            listView1.Columns.AddRange(new ColumnHeader[] { Brand, TotalStock });
+            listView1.Location = new Point(293, 22);
             listView1.Name = "listView1";
-            listView1.Size = new Size(316, 244);
-            listView1.TabIndex = 2;
+            listView1.Size = new Size(171, 308);
+            listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
             // 
-            // City
+            // Brand
             // 
-            City.Text = "City";
+            Brand.Text = "Brand";
+            Brand.Width = 70;
             // 
-            // NumberOfCustomer
+            // TotalStock
             // 
-            NumberOfCustomer.Text = "Number Of Customer";
-            NumberOfCustomer.Width = 250;
+            TotalStock.Text = "Total Stock";
+            TotalStock.Width = 70;
             // 
-            // EnCokSehir
+            // button1
+            // 
+            button1.Location = new Point(293, 346);
+            button1.Name = "button1";
+            button1.Size = new Size(171, 56);
+            button1.TabIndex = 1;
+            button1.Text = "Ürünleri Sırala";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // UrunMarkaStokSiralama
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(924, 540);
-            Controls.Add(listView1);
+            ClientSize = new Size(800, 450);
             Controls.Add(button1);
-            Name = "EnCokSehir";
-            Text = "EnCokSehir";
-            Load += EnCokSehir_Load_1;
+            Controls.Add(listView1);
+            Name = "UrunMarkaStokSiralama";
+            Text = "UrunMarkaStokSiralama";
+            Load += UrunMarkaStokSiralama_Load;
             ResumeLayout(false);
         }
 
         #endregion
-        private Button button1;
+
         private ListView listView1;
-        private ColumnHeader City;
-        private ColumnHeader NumberOfCustomer;
+        private Button button1;
+        private ColumnHeader Brand;
+        private ColumnHeader TotalStock;
     }
 }
