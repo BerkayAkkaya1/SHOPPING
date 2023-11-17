@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SHOPPING
 {
@@ -17,22 +18,15 @@ namespace SHOPPING
         {
             InitializeComponent();
         }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            dbManager.UrunIdListeleme(listView1, comboBox1);
+        }
         private void UrunIdListeleme_Load(object sender, EventArgs e)
         {
             dbManager = new DbManager();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (comboBox1.Text == string.Empty || comboBox1.Text == null)
-            {
-                dbManager.UrunIdListeleme(listView1, int.MaxValue.ToString());
-            }
-            else
-            {
-
-                dbManager.UrunIdListeleme(listView1, comboBox1.Text);
-            }
+            dbManager.UrunKategoriGetir(comboBox1);
+            dbManager.UrunIdListeleme(listView1, comboBox1);
         }
     }
 }

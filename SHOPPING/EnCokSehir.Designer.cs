@@ -36,9 +36,9 @@
             // 
             // button1
             // 
-            button1.Location = new Point(476, 26);
+            button1.Location = new Point(42, 90);
             button1.Name = "button1";
-            button1.Size = new Size(75, 27);
+            button1.Size = new Size(140, 53);
             button1.TabIndex = 1;
             button1.Text = "İli Getir";
             button1.UseVisualStyleBackColor = true;
@@ -49,7 +49,7 @@
             listView1.Columns.AddRange(new ColumnHeader[] { City, NumberOfCustomer });
             listView1.Location = new Point(12, 12);
             listView1.Name = "listView1";
-            listView1.Size = new Size(316, 244);
+            listView1.Size = new Size(200, 61);
             listView1.TabIndex = 2;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
@@ -61,7 +61,7 @@
             // NumberOfCustomer
             // 
             NumberOfCustomer.Text = "Number Of Customer";
-            NumberOfCustomer.Width = 250;
+            NumberOfCustomer.Width = 127;
             // 
             // EnCokSehir
             // 

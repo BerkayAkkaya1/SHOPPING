@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             listView1 = new ListView();
             Name = new ColumnHeader();
             Price = new ColumnHeader();
             Category = new ColumnHeader();
             comboBox1 = new ComboBox();
             button1 = new Button();
+            contextMenuStrip1 = new ContextMenuStrip(components);
             SuspendLayout();
             // 
             // listView1
@@ -65,8 +67,8 @@
             // 
             // comboBox1
             // 
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Erkek Giyim", "Kadın Giyim", "Çocuk Giyim", "Ayakkabı" });
             comboBox1.Location = new Point(504, 12);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(121, 23);
@@ -74,13 +76,18 @@
             // 
             // button1
             // 
-            button1.Location = new Point(504, 129);
+            button1.Location = new Point(504, 109);
             button1.Name = "button1";
             button1.Size = new Size(121, 23);
             button1.TabIndex = 2;
             button1.Text = "Ürünleri Getir";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(61, 4);
             // 
             // UrunIdListeleme
             // 
@@ -102,5 +109,6 @@
         private ColumnHeader Category;
         private ComboBox comboBox1;
         private Button button1;
+        private ContextMenuStrip contextMenuStrip1;
     }
 }

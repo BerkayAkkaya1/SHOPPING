@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
+using System.Runtime.Serialization;
+using System.Security.Cryptography.Pkcs;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SHOPPING
 {
     internal class DbManager
     {
-        public void VerileriSirala(ListView listView)
+        public void VerileriSirala(System.Windows.Forms.ListView listView)
         {
+            listView.Items.Clear();
             using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
             {
                 conn.Open();
@@ -39,7 +46,7 @@ namespace SHOPPING
                 conn.Close();
             }
         }
-        public void CinsiyeteGoreYasOrtalama(TextBox textBox, bool cinsiyet)
+        public void CinsiyeteGoreYasOrtalama(System.Windows.Forms.TextBox textBox, bool cinsiyet)
         {
             using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
             {
@@ -66,12 +73,13 @@ namespace SHOPPING
                 conn.Close();
             }
         }
-        public void EnCokSehir(ListView listView)
+        public void EnCokSehir(System.Windows.Forms.ListView listView)
         {
+            listView.Items.Clear();
             using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("SELECT City, COUNT(*) AS NumberOfCustomer FROM Customers GROUP BY City ORDER BY NumberOfCustomer DESC",conn))
+                using (SqlCommand cmd = new SqlCommand("SELECT Top 1 City, COUNT(*) AS NumberOfCustomer FROM Customers GROUP BY City ORDER BY NumberOfCustomer DESC", conn))
                 {
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
@@ -80,6 +88,7 @@ namespace SHOPPING
                             ListViewItem sehir = new ListViewItem();
                             sehir.Text = rdr["City"].ToString();
                             sehir.SubItems.Add(rdr["NumberOfCustomer"].ToString());
+                            listView.Items.Add(sehir);
                         }
                         rdr.Close();
                     }
@@ -87,26 +96,49 @@ namespace SHOPPING
                 conn.Close();
             }
         }
-        public void IstanbuldaYasam(ListView listView)
+        public void SehirGetir(System.Windows.Forms.ComboBox comboBox2)
         {
             using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Customers WHERE City = 'İstanbul' AND Gender = 'K'", conn))
+                comboBox2.Items.Clear();
+                comboBox2.Items.Add("Hepsi");
+                using (SqlCommand cmd = new SqlCommand("SELECT DISTINCT City FROM Customers", conn))
                 {
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         while (rdr.Read())
                         {
-                            ListViewItem goster = new ListViewItem();
-                            goster.Text = rdr["ID"].ToString();
-                            goster.SubItems.Add(rdr["Name"].ToString());
-                            goster.SubItems.Add(rdr["City"].ToString());
-                            goster.SubItems.Add(rdr["BirthDate"].ToString());
-                            goster.SubItems.Add(rdr["Gender"].ToString());
-                            goster.SubItems.Add(rdr["Country"].ToString());
-                            goster.SubItems.Add(rdr["Age"].ToString());
-                            listView.Items.Add(goster);
+                            comboBox2.Items.Add(rdr["City"].ToString());
+                        }
+                        comboBox2.SelectedIndex = 0;
+                    }
+                }
+                conn.Close();
+            }
+        }
+        public void IstanbuldaYasam(System.Windows.Forms.ListView listView, System.Windows.Forms.ComboBox comboBox1, System.Windows.Forms.ComboBox comboBox2)
+        {
+            using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Customers WHERE City = @p1 AND Gender = @p2", conn))
+                {
+                    cmd.Parameters.AddWithValue("@p1", comboBox2.SelectedValue != null ? comboBox2.SelectedValue.ToString() : "");
+                    cmd.Parameters.AddWithValue("@p2", comboBox1.SelectedValue != null ? comboBox1.SelectedValue.ToString() : "");
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            ListViewItem siralama = new ListViewItem();
+                            siralama.Text = rdr["ID"].ToString();
+                            siralama.SubItems.Add(rdr["Name"].ToString());
+                            siralama.SubItems.Add(rdr["City"].ToString());
+                            siralama.SubItems.Add(rdr["BirthDate"].ToString());
+                            siralama.SubItems.Add(rdr["Gender"].ToString());
+                            siralama.SubItems.Add(rdr["Country"].ToString());
+                            siralama.SubItems.Add(rdr["Age"].ToString());
+                            listView.Items.Add(siralama);
                         }
                         rdr.Close();
                     }
@@ -114,13 +146,13 @@ namespace SHOPPING
                 conn.Close();
             }
         }
-        public void UrunStokListe(ListView listView, string maksStok)
+        public void UrunStokListe(System.Windows.Forms.ListView listView, string maksStok)
         {
             listView.Items.Clear();
             using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("SELECT Brand, Name, Stock FROM Product P INNER JOIN Stock S ON P.ProductId = S.ProductId Where Stock < @p1", conn))
+                using (SqlCommand cmd = new SqlCommand("SELECT Brand, Name, Stock FROM Product P INNER JOIN Stock S ON P.ProductId = S.ProductId Where Stock <= @p1", conn))
                 {
                     cmd.Parameters.AddWithValue("@p1", maksStok);
                     using (SqlDataReader rdr = cmd.ExecuteReader())
@@ -141,42 +173,80 @@ namespace SHOPPING
                 conn.Close();
             }
         }
-        public void UrunIdListeleme(ListView listView, string kategori)
+        public void UrunKategoriGetir(System.Windows.Forms.ComboBox comboBox1)
+        {
+            using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
+            {
+                conn.Open();
+
+                comboBox1.Items.Clear();
+                comboBox1.Items.Add("Hepsi");
+
+                using (SqlCommand cmd = new SqlCommand("SELECT DISTINCT Category FROM Product", conn))
+                {
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            comboBox1.Items.Add(rdr["Category"].ToString());
+                        }
+                        comboBox1.SelectedIndex = 0;
+
+                    }
+                }
+                conn.Close();
+
+            }
+        }
+        public void UrunIdListeleme(System.Windows.Forms.ListView listView, System.Windows.Forms.ComboBox comboBox1)
         {
             listView.Items.Clear();
             using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("SELECT Name, Price, Category FROM Product Where ProductId <10 And Category = @p1", conn))
+                string commandText = "";
+                if(comboBox1.Text!="Hepsi")
                 {
-                    cmd.Parameters.AddWithValue("@p1", kategori);
+                    commandText = "SELECT Name, Price, Category FROM Product Where ProductId < 10 and Category=@p1";
+                }
+                else
+                {
+                    commandText = "SELECT Name, Price, Category FROM Product Where ProductId < 10";
+                }
+
+                using (SqlCommand cmd = new SqlCommand(commandText, conn))
+                {
+                    if (comboBox1.SelectedText != "Hepsi")
+                    {
+                        cmd.Parameters.AddWithValue("@p1",comboBox1.Text);
+                    }
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         while (rdr.Read())
                         {
-                            string Name = rdr["Name"].ToString();
-                            decimal Price = (decimal)rdr["Price"];
-                            string Category = rdr["Category"].ToString();
-
-                            ListViewItem listViewItem = new ListViewItem(new string[] { Name, Price.ToString(), Category });
-                            listView.Items.Add(listViewItem);
+                            ListViewItem item = new ListViewItem();
+                            item.Text = rdr["Name"].ToString();
+                            item.SubItems.Add(rdr["Price"].ToString());
+                            item.SubItems.Add(rdr["Category"].ToString());
+                            listView.Items.Add(item);
                         }
                         rdr.Close();
                     }
                 }
-                conn.Close();
+                conn.Close();  
             }
         }
-        public void UrunMarkaStokSiralama(ListView listView)
+        public void UrunMarkaStokSiralama(System.Windows.Forms.ListView listView)
         {
+            listView.Items.Clear();
             using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand("SELECT Brand, SUM(Stock) AS TotalStock FROM Product P INNER JOIN Stock S ON P.ProductId = S.ProductId GROUP BY P.Brand ORDER BY TotalStock ASC", conn))
                 {
-                    using (SqlDataReader rdr = cmd.ExecuteReader()) 
-                    { 
-                        while(rdr.Read())
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
                         {
                             ListViewItem siralama = new ListViewItem();
                             siralama.Text = rdr["Brand"].ToString();
@@ -189,18 +259,15 @@ namespace SHOPPING
                 conn.Close();
             }
         }
-        public void Urunekle(string TxtBrand, string TxtName,string TxtCategory, string TxtImages,decimal TxtPrice) 
+        public void stokekle(int textBox1, int textBox2)
         {
-            using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True")) 
+            using (SqlConnection conn = new SqlConnection("Data Source=DESKTOP-N5JHVVH;Initial Catalog=SHOPPING;Integrated Security=True"))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO Product(Brand,Name,Price,Category,Image) VALUES (@p1,@p2,@p3,@p4,@p5)",conn)) 
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO Stock(ProductId,Stock) VALUES(@p1,@p2)", conn))
                 {
-                    cmd.Parameters.AddWithValue("@p1", TxtBrand);
-                    cmd.Parameters.AddWithValue("@p2", TxtName);
-                    cmd.Parameters.AddWithValue("@p3", TxtPrice);
-                    cmd.Parameters.AddWithValue("@p4", TxtCategory);
-                    cmd.Parameters.AddWithValue("@p5", TxtImages);
+                    cmd.Parameters.AddWithValue("@p1", textBox1);
+                    cmd.Parameters.AddWithValue("@p2", textBox2);
                     cmd.ExecuteNonQuery();
                 }
                 conn.Close();

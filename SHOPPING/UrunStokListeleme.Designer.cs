@@ -33,7 +33,8 @@
             Name = new ColumnHeader();
             Stock = new ColumnHeader();
             button1 = new Button();
-            comboBox1 = new ComboBox();
+            numericUpDown1 = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // listView1
@@ -61,35 +62,35 @@
             // 
             // button1
             // 
-            button1.Location = new Point(437, 143);
+            button1.Location = new Point(406, 83);
             button1.Name = "button1";
-            button1.Size = new Size(121, 110);
+            button1.Size = new Size(159, 110);
             button1.TabIndex = 1;
             button1.Text = "Listeleyiniz";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // comboBox1
+            // numericUpDown1
             // 
-            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "5", "15", "25" });
-            comboBox1.Location = new Point(437, 12);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
-            comboBox1.TabIndex = 2;
+            numericUpDown1.Location = new Point(406, 12);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.ReadOnly = true;
+            numericUpDown1.Size = new Size(159, 23);
+            numericUpDown1.TabIndex = 4;
+            numericUpDown1.TextAlign = HorizontalAlignment.Center;
+            numericUpDown1.ThousandsSeparator = true;
             // 
             // UrunStokListeleme
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(comboBox1);
+            Controls.Add(numericUpDown1);
             Controls.Add(button1);
             Controls.Add(listView1);
-
             Text = "UrunStokListeleme";
             Load += UrunStokListeleme_Load_1;
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
         }
 
@@ -100,6 +101,6 @@
         private ColumnHeader Name;
         private ColumnHeader Stock;
         private Button button1;
-        private ComboBox comboBox1;
+        private NumericUpDown numericUpDown1;
     }
 }

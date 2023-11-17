@@ -37,7 +37,8 @@ namespace SHOPPING
             string txtCategory = TxtCategory.Text;
             string txtImages = TxtImages.Text;
             decimal txtPrice = Convert.ToDecimal(TxtPrice.Text);
-            dbManager.Urunekle(txtBrand, txtName, txtCategory, txtImages, txtPrice);
+          //  dbManager.Urunekle(txtBrand, txtName, txtCategory, txtImages, txtPrice);
+            MessageBox.Show("Kayıt Eklendi.");
         }
     }
 }

@@ -21,13 +21,14 @@ namespace SHOPPING
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if (comboBox1.Text == string.Empty || comboBox1.Text == null)
+            string maksStok = numericUpDown1.Value.ToString();
+            if (numericUpDown1.Text == string.Empty || numericUpDown1.Text == null)
             {
                 dbManager.UrunStokListe(listView1, int.MaxValue.ToString());
             }
             else
             {
-                dbManager.UrunStokListe(listView1, comboBox1.Text);
+                dbManager.UrunStokListe(listView1, numericUpDown1.Text);
             }
         }
         private void UrunStokListeleme_Load_1(object sender, EventArgs e)
